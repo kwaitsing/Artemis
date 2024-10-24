@@ -1,8 +1,10 @@
-import { URN, type IgniteConf, type Module, type MRequestOPT } from "ashes-urn"
+import { URN, type IgniteConf, type Module, type MRequestOPT, type Sch2Ts } from "ashes-urn"
 import { logger } from "toolbx"
 import { gateway } from "./app/gateway";
-import { ServerRoot } from "./app/root/RootModule";
-
+import { SRSchema } from "./app/ServerReport/SRSchema";
+import SRHandler from "./app/ServerReport/SRHandler";
+import type { GlobalConf, serverInStore } from "./type";
+import { UserFetch } from "./app/UserFetch/UFDesc";
 // URN framework exported for other componments
 export const urn = new URN({
     enableVerbose: false // Enable verbose on routing
@@ -16,9 +18,10 @@ const args = urn.args()
 
 const env = urn.env()
 
-// Database(mongodb+redis)
-export const db = await urn.db('mongodb://localhost:27017', 'default') // db as mongodb interface
-export const cachedb = await urn.cdb('redis://127.0.0.1:6379') // cdb as redis interface
+const GlobalConfiguration: GlobalConf = {
+    port: args.p || args.port || Number(env.PORT) || 9702,
+    key: args.k || args.key || env.KEY || 'oATqKPjF72wau8MdJPhV'
+}
 
 /**
  * 
@@ -27,6 +30,8 @@ export const cachedb = await urn.cdb('redis://127.0.0.1:6379') // cdb as redis i
  * [createInstance] => loadInstance => igniteInstance
  * 
  */
+
+export let servers: serverInStore[] = []
 
 const instance = urn.createInstance()
     .onError(({ code, error, set }) => {
@@ -40,6 +45,12 @@ const instance = urn.createInstance()
             }
         }
     })
+    .ws('/ws', {
+        body: SRSchema.msg,
+        message(ws, body) {
+            ws.send(SRHandler.pushReport(body))
+        }
+    })
 //.use(swagger()); if you wish you can chain more plugins to the instance here
 
 urn.instance = instance // Store the instance back
@@ -48,7 +59,7 @@ export type OPT = MRequestOPT<typeof instance['decorator']> // Extract RequestOP
 
 // createInstance => [loadInstance] => igniteInstance
 const Modules: Module[] = [
-    ServerRoot
+    UserFetch
 ]
 
 /**
@@ -62,10 +73,10 @@ urn.instance = urn.loadInstance(Modules, false, gateway)
  * ref to https://bun.sh/docs/api/http#bun-serve
  */
 const serverConf: IgniteConf = {
-    hostname: '127.0.0.1', // This can be undefined
-    port: 9901
+    hostname: '0.0.0.0', // This can be undefined
+    port: GlobalConfiguration.port
 }
 
 urn.igniteInstance(serverConf)
 
-logger(`+ URN running on ${serverConf.hostname}:${serverConf.port}`, 0)
+logger(`+ Artemis running on ${serverConf.hostname}:${serverConf.port}`, 0)
