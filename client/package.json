@@ -7,5 +7,10 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "ashes-urn": "^100.0.8",
+    "minimist": "^1.2.8",
+    "systeminformation": "^5.23.5"
   }
 }
