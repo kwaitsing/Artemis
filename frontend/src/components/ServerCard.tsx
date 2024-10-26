@@ -10,13 +10,12 @@ export const ServerCard = (props: {
     const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
     
     useEffect(() => {
-        const intervalId = setInterval(() => {
+        setInterval(() => {
             setCurrentTS(Math.floor(new Date().getTime() / 1000)); 
-            setIsDown((currentTS - props.data.timestamp) > (1000 * 60));
+            setIsDown((currentTS - props.data.timestamp) > 60);
+            console.log(isDown, currentTS - props.data.timestamp)
         }, 1000);
-
-        return () => clearInterval(intervalId);
-    }, [props.data.timestamp]);
+    }, []);
     
     const Huptime = secondsToTime(props.data.uptime)
 

@@ -39,13 +39,11 @@ export const ServerTable = (props: {
                         const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
 
                         useEffect(() => {
-                            const intervalId = setInterval(() => {
+                            setInterval(() => {
                                 setCurrentTS(Math.floor(new Date().getTime() / 1000));
-                                setIsDown((currentTS - server.timestamp) > (1000 * 60));
+                                setIsDown((currentTS - server.timestamp) > 60);
                             }, 1000);
-
-                            return () => clearInterval(intervalId);
-                        }, [server.timestamp]);
+                        }, []);
                         const Huptime = secondsToTime(server.uptime)
 
                         const CPUusage = Math.round(server.cpu * 100) / 100
@@ -62,7 +60,7 @@ export const ServerTable = (props: {
                         const stoUsage = Math.round(server.storage.used / server.storage.total * 10000) / 100
 
                         return (
-                            <tr onClick={() => jumpToSrvCard(server.name)}>
+                            <tr key={server.name} onClick={() => jumpToSrvCard(server.name)}>
                                 <td>
                                     <div className={`chip no-margin ${isDown ? 'red' : 'green'}`}><i>{isDown ? 'close' : 'verified'}</i></div>
                                 </td>
