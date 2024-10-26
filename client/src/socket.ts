@@ -26,9 +26,18 @@ export const transmitter = () => {
         }
     }, GlobalConfiguration.updInterval * 1000)
 
-    // Fail Reconnector
+    // Avoid ws send blockage
+    const wsCheckITVL = setInterval(function () {
+        if (wsSocket.bufferedAmount == 0) {
+            isWSBlocked = false
+        } else {
+            isWSBlocked = true
+        }
+    }, 50);
 
+    // Fail Reconnector
     wsSocket.addEventListener("close", () => {
+        clearInterval(wsCheckITVL)
         clearInterval(transITVL);
         wsSocket.close();
         setTimeout(() => {
@@ -36,12 +45,4 @@ export const transmitter = () => {
         }, 5000);
     });
 
-    // Avoid ws send blockage
-    setInterval(function () {
-        if (wsSocket.bufferedAmount == 0) {
-            isWSBlocked = false
-        } else {
-            isWSBlocked = true
-        }
-    }, 50);
 }
