@@ -39,18 +39,18 @@ export let RTNetFlow: uploadDataType['network'] = {
 export let RTcpu = 0;
 // Storage
 export let RTstorage: uploadDataType['storage'] = {
-    free: 0,
-    occu: 0
+    used: 0,
+    total: 0
 };
 // Mem
 export let RTMem: uploadDataType['mem'] = {
     onboard: {
-        free: 0,
-        occu: 0
+        used: 0,
+        total: 0
     },
     swap: {
-        free: 0,
-        occu: 0
+        used: 0,
+        total: 0
     }
 }
 
@@ -72,8 +72,8 @@ export const startTimer = async () => {
             const data = (await networkStats()).find((nw) => nw.iface === mainInterface)
             RTNetFlow = {
                 total: {
-                    up: data?.rx_bytes || 0,
-                    down: data?.tx_bytes || 0
+                    up: data?.tx_bytes || 0,
+                    down: data?.rx_bytes || 0
                 },
                 current: {
                     up: data?.tx_sec || 0,
@@ -81,23 +81,27 @@ export const startTimer = async () => {
                 }
             };
             // Storage
+            let singleRTStorage = {
+                used: 0,
+                total: 0
+            };
             (await fsSize()).forEach((fsObj) => {
                 if (doRecordFs.includes(fsObj.type))
                     RTstorage = {
-                        free: fsObj.available + RTstorage.free,
-                        occu: fsObj.used + RTstorage.occu
+                        used: fsObj.used + singleRTStorage.used,
+                        total: fsObj.size + singleRTStorage.total
                     };
             });
             // Mem
             const memData = await mem()
             RTMem = {
                 onboard: {
-                    free: memData.available,
-                    occu: memData.total
+                    used: memData.active,
+                    total: memData.total
                 },
                 swap: {
-                    free: memData.swapfree,
-                    occu: memData.swaptotal
+                    used: memData.swapused,
+                    total: memData.swaptotal
                 }
             }
             isTimerRunning = false;

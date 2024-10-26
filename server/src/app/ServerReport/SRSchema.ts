@@ -1,8 +1,8 @@
 import { t } from "ashes-urn";
 
 const precObjSch = t.Object({
-    free: t.Number(),
-    occu: t.Number()
+    used: t.Number(),
+    total: t.Number()
 })
 
 export const serverObj = t.Object({

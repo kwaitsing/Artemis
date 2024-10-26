@@ -13,7 +13,6 @@ export const GlobalConfiguration: GlobalConf = {
     verbose: args.v || args.verbose || false
 }
 
-
 const IPandLoc = await (await fetch('http://ip-api.com/json')).json()
 
 

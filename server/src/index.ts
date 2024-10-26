@@ -18,7 +18,7 @@ const args = urn.args()
 
 const env = urn.env()
 
-const GlobalConfiguration: GlobalConf = {
+export const GlobalConfiguration: GlobalConf = {
     port: args.p || args.port || Number(env.PORT) || 9702,
     key: args.k || args.key || env.KEY || 'oATqKPjF72wau8MdJPhV'
 }
@@ -48,7 +48,7 @@ const instance = urn.createInstance()
     .ws('/api/v1/upload', {
         body: SRSchema.msg,
         message(ws, body) {
-            ws.send(SRHandler.pushReport(body))
+            SRHandler.pushReport(body)
         }
     })
 //.use(swagger()); if you wish you can chain more plugins to the instance here

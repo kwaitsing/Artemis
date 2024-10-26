@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/ServerCard.tsx","./src/components/ServerTable.tsx","./src/utils/socket.ts"],"errors":true,"version":"5.6.3"}
