@@ -5,7 +5,6 @@ import { socket } from './utils/socket'
 import { FatalErr, Loading } from 'ashes-wreath'
 import { ServerCard } from './components/ServerCard'
 import { ServerTable } from './components/ServerTable'
-import { wrap } from 'module'
 
 function App() {
 

@@ -13,11 +13,11 @@ export const GlobalConfiguration: GlobalConf = {
     verbose: args.v || args.verbose || false
 }
 
-const IPandLoc = await (await fetch('http://ip-api.com/json')).json()
+const IPandLoc = await (await fetch('https://api.country.is/')).json()
 
 
 export const oneTimeData: oneTimeDataType = {
-    countryCode: IPandLoc.countryCode
+    countryCode: IPandLoc.country
 }
 
 await startTimer()

@@ -1,11 +1,23 @@
 import { hread, secondsToTime } from "toolbx"
 import { serverInStore } from "../../../server/src/type"
+import { useEffect, useState } from "react";
 
 export const ServerCard = (props: {
     data: serverInStore
 }) => {
-    const currentTS = Math.floor(new Date().getTime() / 1000)
-    const isDown = (currentTS - props.data.timestamp) > (1000 * 60)
+
+    const [isDown, setIsDown] = useState(false);
+    const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
+    
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentTS(Math.floor(new Date().getTime() / 1000)); 
+            setIsDown((currentTS - props.data.timestamp) > (1000 * 60));
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [props.data.timestamp]);
+    
     const Huptime = secondsToTime(props.data.uptime)
 
     const CPUusage = Math.round(props.data.cpu * 100) / 100

@@ -1,5 +1,6 @@
 import { secondsToTime, hread } from "toolbx"
 import { serverInStore } from "../../../server/src/type"
+import { useState, useEffect } from "react"
 
 export const ServerTable = (props: {
     servers: serverInStore[]
@@ -9,7 +10,7 @@ export const ServerTable = (props: {
         const targetElement = document.getElementById(name);
         if (targetElement) {
             window.scrollTo({
-                top: targetElement.offsetTop, 
+                top: targetElement.offsetTop,
                 behavior: 'smooth'
             });
         }
@@ -34,8 +35,17 @@ export const ServerTable = (props: {
             <tbody>
                 {
                     props.servers.map((server) => {
-                        const currentTS = Math.floor(new Date().getTime() / 1000)
-                        const isDown = (currentTS - server.timestamp) > (1000 * 60)
+                        const [isDown, setIsDown] = useState(false);
+                        const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
+
+                        useEffect(() => {
+                            const intervalId = setInterval(() => {
+                                setCurrentTS(Math.floor(new Date().getTime() / 1000));
+                                setIsDown((currentTS - server.timestamp) > (1000 * 60));
+                            }, 1000);
+
+                            return () => clearInterval(intervalId);
+                        }, [server.timestamp]);
                         const Huptime = secondsToTime(server.uptime)
 
                         const CPUusage = Math.round(server.cpu * 100) / 100
