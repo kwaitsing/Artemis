@@ -1,4 +1,47 @@
-import { GlobalConfiguration } from ".."
+import { GlobalConfiguration } from "..";
+import { collector } from "./collector";
 
-export const socket = async () => {
+// Transmitter
+export const transmitter = () => {
+
+    let isWSBlocked = false
+
+    // Create WebSocket channel
+
+    const wsSocket = new WebSocket(GlobalConfiguration.remote + '/api/v1/upload', {
+        //@ts-ignore
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    const transITVL = setInterval(async () => {
+        if (!isWSBlocked) {
+            const data = JSON.stringify({
+                key: GlobalConfiguration.key,
+                data: collector()
+            });
+            if (GlobalConfiguration.verbose) console.log(data)
+            wsSocket.send(data);
+        }
+    }, GlobalConfiguration.updInterval * 1000)
+
+    // Fail Reconnector
+
+    wsSocket.addEventListener("close", () => {
+        clearInterval(transITVL);
+        wsSocket.close();
+        setTimeout(() => {
+            transmitter()
+        }, 5000);
+    });
+
+    // Avoid ws send blockage
+    setInterval(function () {
+        if (wsSocket.bufferedAmount == 0) {
+            isWSBlocked = false
+        } else {
+            isWSBlocked = true
+        }
+    }, 50);
 }

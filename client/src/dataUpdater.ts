@@ -59,42 +59,51 @@ export const startTimer = async () => {
 
     // Runtime Conf
     const mainInterface = await networkInterfaceDefault();
+    // Avoid deadlock
+    let isTimerRunning = false;
 
     setInterval(async () => {
-        // CPU
-        RTcpu = (await currentLoad()).currentLoad;
-        // NetFlow
-        const data = (await networkStats()).find((nw) => nw.iface === mainInterface)
-        RTNetFlow = {
-            total: {
-                up: data?.rx_bytes || 0,
-                down: data?.tx_bytes || 0
-            },
-            current: {
-                up: data?.tx_sec || 0,
-                down: data?.rx_sec || 0
+
+        if (!isTimerRunning) {
+            isTimerRunning = true;
+            // CPU
+            RTcpu = (await currentLoad()).currentLoad;
+            // NetFlow
+            const data = (await networkStats()).find((nw) => nw.iface === mainInterface)
+            RTNetFlow = {
+                total: {
+                    up: data?.rx_bytes || 0,
+                    down: data?.tx_bytes || 0
+                },
+                current: {
+                    up: data?.tx_sec || 0,
+                    down: data?.rx_sec || 0
+                }
+            };
+            // Storage
+            (await fsSize()).forEach((fsObj) => {
+                if (doRecordFs.includes(fsObj.type))
+                    RTstorage = {
+                        free: fsObj.available + RTstorage.free,
+                        occu: fsObj.used + RTstorage.occu
+                    };
+            });
+            // Mem
+            const memData = await mem()
+            RTMem = {
+                onboard: {
+                    free: memData.available,
+                    occu: memData.total
+                },
+                swap: {
+                    free: memData.swapfree,
+                    occu: memData.swaptotal
+                }
             }
-        };
-        // Storage
-        (await fsSize()).forEach((fsObj) => {
-            if (doRecordFs.includes(fsObj.type))
-                RTstorage = {
-                    free: fsObj.available + RTstorage.free,
-                    occu: fsObj.used + RTstorage.occu
-                };
-        });
-        // Mem
-        const memData = await mem()
-        RTMem = {
-            onboard: {
-                free: memData.available,
-                occu: memData.total
-            },
-            swap: {
-                free: memData.swapfree,
-                occu: memData.swaptotal
-            }
+            isTimerRunning = false;
         }
+
+
     }, GlobalConfiguration.updInterval * 1000);
 }
 

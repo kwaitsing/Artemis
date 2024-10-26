@@ -6,6 +6,7 @@ export interface GlobalConf {
     key: string
     name: string
     updInterval: number
+    verbose: boolean
 }
 
 export interface oneTimeDataType {

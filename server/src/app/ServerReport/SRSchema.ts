@@ -7,7 +7,7 @@ const precObjSch = t.Object({
 
 export const serverObj = t.Object({
     name: t.String(),
-    location: t.String({maxLength: 2}),
+    location: t.String({ maxLength: 2 }),
     uptime: t.Number(),
     loadAVG: t.Number(),
     cpu: t.Number(),
@@ -16,9 +16,15 @@ export const serverObj = t.Object({
         swap: precObjSch
     }),
     storage: precObjSch,
-    traffic: t.Object({
-        up: t.Number(),
-        down: t.Number()
+    network: t.Object({
+        total: t.Object({
+            up: t.Number(),
+            down: t.Number()
+        }),
+        current: t.Object({
+            up: t.Number(),
+            down: t.Number()
+        })
     })
 })
 

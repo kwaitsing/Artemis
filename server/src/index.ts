@@ -33,7 +33,7 @@ const GlobalConfiguration: GlobalConf = {
 
 export let servers: serverInStore[] = []
 
-let instance = urn.createInstance()
+const instance = urn.createInstance()
     .onError(({ code, error, set }) => {
         set.status = 500
         return {
@@ -45,13 +45,15 @@ let instance = urn.createInstance()
             }
         }
     })
-    .ws('/ws', {
+    .ws('/api/v1/upload', {
         body: SRSchema.msg,
         message(ws, body) {
             ws.send(SRHandler.pushReport(body))
         }
     })
 //.use(swagger()); if you wish you can chain more plugins to the instance here
+
+urn.instance = instance // Store the instance back
 
 // createInstance => [loadInstance] => igniteInstance
 const Modules: Module[] = [
@@ -63,9 +65,8 @@ const Modules: Module[] = [
  * 
  * The preflightInstance is the instance after the loading stage, preserved for future usage like Eden Treaty
  */
-instance = urn.loadInstance(Modules, false, gateway)
+urn.loadInstance(Modules, false, gateway)
 export type OPT = MRequestOPT<typeof instance['decorator']> // Extract RequestOPT for gateway and Modules
-urn.instance = instance // Store the instance back
 
 /**
  * ref to https://bun.sh/docs/api/http#bun-serve
