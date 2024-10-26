@@ -35,7 +35,7 @@ export const ServerTable = (props: {
                 {
                     props.servers.map((server) => {
                         const currentTS = Math.floor(new Date().getTime() / 1000)
-                        const isDown = (currentTS - server.timestamp) > (1000 * 60 * 4)
+                        const isDown = (currentTS - server.timestamp) > (1000 * 60)
                         const Huptime = secondsToTime(server.uptime)
 
                         const CPUusage = Math.round(server.cpu * 100) / 100

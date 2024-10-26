@@ -5,7 +5,7 @@ export const ServerCard = (props: {
     data: serverInStore
 }) => {
     const currentTS = Math.floor(new Date().getTime() / 1000)
-    const isDown = (currentTS - props.data.timestamp) > (1000 * 60 * 4)
+    const isDown = (currentTS - props.data.timestamp) > (1000 * 60)
     const Huptime = secondsToTime(props.data.uptime)
 
     const CPUusage = Math.round(props.data.cpu * 100) / 100
@@ -29,7 +29,7 @@ export const ServerCard = (props: {
 
 
     return (
-        <article id={props.data.name} className="medium-width">
+        <article id={props.data.name} className="medium-width no-margin">
             <div className="row">
                 <div>
                     <img className="large" src={`/client/${props.data.location}.svg`} /><br />

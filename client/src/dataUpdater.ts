@@ -59,6 +59,7 @@ export const startTimer = async () => {
 
     // Runtime Conf
     const mainInterface = await networkInterfaceDefault();
+    console.log(mainInterface)
     // Avoid deadlock
     let isTimerRunning = false;
 

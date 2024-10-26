@@ -5,6 +5,7 @@ import { socket } from './utils/socket'
 import { FatalErr, Loading } from 'ashes-wreath'
 import { ServerCard } from './components/ServerCard'
 import { ServerTable } from './components/ServerTable'
+import { wrap } from 'module'
 
 function App() {
 
@@ -32,17 +33,17 @@ function App() {
 
   return (
     <>
-    <header className='center-align'>
-      <h5 className='large-padding'>Artemis Server Monitor</h5>        
-    </header>
-    <article className='no-round no-margin'>
-      <div className='large-margin' style={{ overflowX: 'auto' }}>
-        <ServerTable servers={data.servers} />
-      </div>
-    </article>
-      
+      <header className='center-align'>
+        <h5 className='large-padding'>Artemis Server Monitor</h5>
+      </header>
+      <article className='no-round no-margin'>
+        <div className='large-margin' style={{ overflowX: 'auto' }}>
+          <ServerTable servers={data.servers} />
+        </div>
+      </article>
 
-      <div className='row scroll medium-padding'>
+
+      <div className='medium-padding center-align' style={{ display: 'flex' , gap: '20px', flexWrap: 'wrap'}}>
         {
           data.servers.map((server) => {
             return <ServerCard key={server.name} data={server} />

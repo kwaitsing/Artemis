@@ -4,6 +4,11 @@
 2. Deploy client on your servers, and server(this is the mothership where hold all your reported data) on your homeserver
 3. deploy reverse_proxy with the Caddyfile example inside /server/
 
+> Tips
+
+If you get Illegal instruction then simple build the executable you need like this
+`bun build --compile --minify --target=bun-linux-x64-baseline --sourcemap ./src/index.ts --outfile ./ArtemisServer`
+
 # Client args
 
 |arg|default|desc|
