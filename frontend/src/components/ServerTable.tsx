@@ -35,14 +35,14 @@ export const ServerTable = (props: {
             <tbody>
                 {
                     props.servers.map((server) => {
-                        const [isDown, setIsDown] = useState(false);
                         const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
 
                         useEffect(() => {
-                            setInterval(() => {
+                            const int = setInterval(() => {
                                 setCurrentTS(Math.floor(new Date().getTime() / 1000));
-                                setIsDown((currentTS - server.timestamp) > 60);
                             }, 1000);
+                            
+                            return () => clearInterval(int);
                         }, []);
                         const Huptime = secondsToTime(server.uptime)
 
@@ -62,7 +62,7 @@ export const ServerTable = (props: {
                         return (
                             <tr key={server.name} onClick={() => jumpToSrvCard(server.name)}>
                                 <td>
-                                    <div className={`chip no-margin ${isDown ? 'red' : 'green'}`}><i>{isDown ? 'close' : 'verified'}</i></div>
+                                    <div className={`chip no-margin ${currentTS - server.timestamp > 60 ? 'red' : 'green'}`}><i>{currentTS - server.timestamp > 60 ? 'close' : 'verified'}</i></div>
                                 </td>
                                 <td><img className="large" src={`/client/${server.location}.svg`} /></td>
                                 <td>{server.name}</td>

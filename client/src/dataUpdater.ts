@@ -62,7 +62,7 @@ export const startTimer = async () => {
     // Avoid deadlock
     let isTimerRunning = false;
 
-    setInterval(async () => {
+    const monitor = async () => {
 
         if (!isTimerRunning) {
             isTimerRunning = true;
@@ -70,16 +70,13 @@ export const startTimer = async () => {
             RTcpu = (await currentLoad()).currentLoad;
             // NetFlow
             const data = (await networkStats()).find((nw) => nw.iface === mainInterface)
-            RTNetFlow = {
-                total: {
-                    up: data?.tx_bytes || 0,
-                    down: data?.rx_bytes || 0
-                },
-                current: {
-                    up: data?.tx_sec || 0,
-                    down: data?.rx_sec || 0
-                }
-            };
+            if (data) {
+                RTNetFlow.total.up = data.tx_bytes;
+                RTNetFlow.total.down = data.rx_bytes;
+                RTNetFlow.current.up = data.tx_sec;
+                RTNetFlow.current.down = data.rx_sec;
+            }
+
             // Storage
             let singleRTStorage = {
                 used: 0,
@@ -87,27 +84,25 @@ export const startTimer = async () => {
             };
             (await fsSize()).forEach((fsObj) => {
                 if (doRecordFs.includes(fsObj.type))
-                    RTstorage = {
-                        used: fsObj.used + singleRTStorage.used,
-                        total: fsObj.size + singleRTStorage.total
-                    };
+                    singleRTStorage.used += fsObj.used;
+                singleRTStorage.total += fsObj.size;
             });
+            RTstorage = {
+                used: singleRTStorage.used,
+                total: singleRTStorage.total
+            };
             // Mem
             const memData = await mem()
-            RTMem = {
-                onboard: {
-                    used: memData.active,
-                    total: memData.total
-                },
-                swap: {
-                    used: memData.swapused,
-                    total: memData.swaptotal
-                }
-            }
+            RTMem.onboard.used = memData.active;
+            RTMem.onboard.total = memData.total;
+            RTMem.swap.used = memData.swapused;
+            RTMem.swap.total = memData.swaptotal;
             isTimerRunning = false;
         }
 
+        setTimeout(monitor, GlobalConfiguration.updInterval * 1000);
+    }
 
-    }, GlobalConfiguration.updInterval * 1000);
+    monitor();
 }
 

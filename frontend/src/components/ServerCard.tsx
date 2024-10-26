@@ -6,15 +6,14 @@ export const ServerCard = (props: {
     data: serverInStore
 }) => {
 
-    const [isDown, setIsDown] = useState(false);
     const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
     
     useEffect(() => {
-        setInterval(() => {
-            setCurrentTS(Math.floor(new Date().getTime() / 1000)); 
-            setIsDown((currentTS - props.data.timestamp) > 60);
-            console.log(isDown, currentTS - props.data.timestamp)
+        const int = setInterval(() => {
+            setCurrentTS(Math.floor(new Date().getTime() / 1000));
         }, 1000);
+        
+        return () => clearInterval(int);
     }, []);
     
     const Huptime = secondsToTime(props.data.uptime)
@@ -44,7 +43,7 @@ export const ServerCard = (props: {
             <div className="row">
                 <div>
                     <img className="large" src={`/client/${props.data.location}.svg`} /><br />
-                    <div className={`chip responsive no-margin ${isDown ? 'red' : 'green'}`}><i>{isDown ? 'close' : 'verified'}</i></div>
+                    <div className={`chip responsive no-margin ${currentTS - props.data.timestamp > 60 ? 'red' : 'green'}`}><i>{currentTS - props.data.timestamp > 60 ? 'close' : 'verified'}</i></div>
                 </div>
                 <div className="max">
                     <h5>{props.data.name}</h5>
