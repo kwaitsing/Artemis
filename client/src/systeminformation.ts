@@ -13,7 +13,7 @@ const store: {
 export const networkInterfaceDefault = async () => {
     const ifaces = os.networkInterfaces();
     let ifacename = ''
-    const cmdReturn = (await $`LC_ALL=C ip route 2> /dev/null | grep default`.text()).split('\n')[0].split(/\s+/)
+    const cmdReturn = (await $`LC_ALL=C ip route 2> /dev/null | grep default; ip -6 route 2> /dev/null | grep default; `.text()).split('\n')[0].split(/\s+/)
     if (cmdReturn[0] === 'none' && cmdReturn[5]) {
         ifacename = cmdReturn[5];
     } else if (cmdReturn[4]) {
