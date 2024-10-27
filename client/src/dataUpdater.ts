@@ -1,5 +1,5 @@
 // Real Time Data Monitor
-import { networkInterfaceDefault, currentLoad, networkStats, fsSize, mem } from "systeminformation";
+import { networkInterfaceDefault, currentLoad, networkStats, fsSize, mem } from "./systeminformation";
 import type { uploadDataType } from "./type";
 import { GlobalConfiguration } from "..";
 
@@ -83,9 +83,11 @@ export const startTimer = async () => {
                 total: 0
             };
             (await fsSize()).forEach((fsObj) => {
-                if (doRecordFs.includes(fsObj.type))
-                    singleRTStorage.used += fsObj.used;
-                singleRTStorage.total += fsObj.size;
+                if (doRecordFs.includes(fsObj.type)) {
+                    singleRTStorage.used += fsObj.used
+                    singleRTStorage.total += fsObj.size;
+                    
+                } 
             });
             RTstorage = {
                 used: singleRTStorage.used,

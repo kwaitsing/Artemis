@@ -101,6 +101,7 @@ web_modules/
 # dotenv environment variable files
 
 .env
+bun.lockb
 .env.development.local
 .env.test.local
 .env.production.local

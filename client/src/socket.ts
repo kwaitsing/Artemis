@@ -7,7 +7,6 @@ export const transmitter = () => {
     let isWSBlocked = false
 
     // Create WebSocket channel
-
     const wsSocket = new WebSocket(GlobalConfiguration.remote + '/api/v1/upload', {
         //@ts-ignore
         headers: {
