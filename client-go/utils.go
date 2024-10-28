@@ -19,10 +19,7 @@ func ContainsStr(slice []string, str string) bool {
 
 func networkInterfaceDefault() (string, error) {
 	cmd := exec.Command("sh", "-c", "LC_ALL=C ip route 2> /dev/null | grep default; ip -6 route 2> /dev/null | grep default")
-	output, err := cmd.Output()
-	if err != nil {
-		return "", fmt.Errorf("failed to execute command: %v", err)
-	}
+	output, _ := cmd.Output()
 
 	// Parse the output to get the interface name.
 	lines := strings.Split(string(output), "\n")
