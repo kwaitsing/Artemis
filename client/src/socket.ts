@@ -1,5 +1,6 @@
-import { GlobalConfiguration } from "..";
-import { collector } from "./collector";
+import { GlobalConfiguration, oneTimeData } from "..";
+import OS from 'node:os'
+import { RTcpu, RTMem, RTstorage, RTNetFlow } from "./dataUpdater";
 
 // Transmitter
 export const transmitter = () => {
@@ -18,7 +19,16 @@ export const transmitter = () => {
         if (!isWSBlocked) {
             const data = JSON.stringify({
                 key: GlobalConfiguration.key,
-                data: collector()
+                data: {
+                    name: GlobalConfiguration.name,
+                    location: oneTimeData.countryCode,
+                    uptime: OS.uptime(),
+                    loadAVG: OS.loadavg()[0],
+                    cpu: RTcpu,
+                    mem: RTMem,
+                    storage: RTstorage,
+                    network: RTNetFlow
+                }
             });
             if (GlobalConfiguration.verbose) console.log(data)
             wsSocket.send(data);
