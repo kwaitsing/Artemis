@@ -1,0 +1,6 @@
+http://example.com, https://example.com {
+	reverse_proxy /api* 127.0.0.1:8080
+	file_server {
+		root /data/site/example.com
+	}
+}
