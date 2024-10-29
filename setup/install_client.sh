@@ -35,7 +35,7 @@ ExecStart=/opt/Artemis/ArtemisClient -r \"$1\" -n \"$2\" -k \"$3\"
 Restart=on-failure
 
 [Install]
-WantedBy=multi-user.target" >/opt/ArtemisArtemisClient.service
+WantedBy=multi-user.target" >/opt/Artemis/ArtemisClient.service
 
 # Download Core and
 cd /opt/Artemis && curl -L 'https://github.com/kwaitsing/Artemis/releases/download/pkg/ArtemisClient' >ArtemisClient && chmod +x ArtemisClient && ln -sf /opt/Artemis/ArtemisClient.service /etc/systemd/system/
