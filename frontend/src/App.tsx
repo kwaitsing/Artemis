@@ -15,6 +15,8 @@ function App() {
     timestamp: number
   }>()
 
+  const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
+
   useEffect(() => {
     setInterval(async () => {
       try {
@@ -28,6 +30,14 @@ function App() {
     }, 1000)
   }, [])
 
+  useEffect(() => {
+    const int = setInterval(() => {
+        setCurrentTS(Math.floor(new Date().getTime() / 1000));
+    }, 1000);
+    
+    return () => clearInterval(int);
+}, []);
+
   if (loading || !data) return <Loading msg={'Loading data from artemis server'} />
 
   return (
@@ -37,7 +47,7 @@ function App() {
       </header>
       <article className='no-round no-margin'>
         <div className='large-margin' style={{ overflowX: 'auto' }}>
-          <ServerTable servers={data.servers} />
+          <ServerTable currentTS={currentTS} servers={data.servers} />
         </div>
       </article>
 
@@ -45,7 +55,7 @@ function App() {
       <div className='medium-padding center-align' style={{ display: 'flex' , gap: '20px', flexWrap: 'wrap'}}>
         {
           data.servers.map((server) => {
-            return <ServerCard key={server.name} data={server} />
+            return <ServerCard currentTS={currentTS} key={server.name} data={server} />
           })
         }
       </div>

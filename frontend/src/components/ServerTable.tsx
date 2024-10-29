@@ -1,8 +1,8 @@
 import { secondsToTime, hread } from "toolbx"
 import { serverInStore } from "../../../server/src/type"
-import { useState, useEffect } from "react"
 
 export const ServerTable = (props: {
+    currentTS: number
     servers: serverInStore[]
 }) => {
 
@@ -35,16 +35,8 @@ export const ServerTable = (props: {
             <tbody>
                 {
                     props.servers.map((server) => {
-                        const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
-
-                        useEffect(() => {
-                            const int = setInterval(() => {
-                                setCurrentTS(Math.floor(new Date().getTime() / 1000));
-                            }, 1000);
-                            
-                            return () => clearInterval(int);
-                        }, []);
-                        const Huptime = secondsToTime(server.uptime)
+                        
+                        const Huptime = secondsToTime(props.currentTS - server.uptime)
 
                         const CPUusage = Math.round(server.cpu * 100) / 100
 
@@ -62,7 +54,7 @@ export const ServerTable = (props: {
                         return (
                             <tr key={server.name} onClick={() => jumpToSrvCard(server.name)}>
                                 <td>
-                                    <div className={`chip no-margin ${currentTS - server.timestamp > 60 ? 'red' : 'green'}`}><i>{currentTS - server.timestamp > 60 ? 'close' : 'verified'}</i></div>
+                                    <div className={`chip no-margin ${props.currentTS - server.timestamp > 60 ? 'red' : 'green'}`}><i>{props.currentTS - server.timestamp > 60 ? 'close' : 'verified'}</i></div>
                                 </td>
                                 <td><img className="large" src={`/client/${server.location}.svg`} /></td>
                                 <td>{server.name}</td>

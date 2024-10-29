@@ -53,7 +53,7 @@ func get_location() {
 func getOneTimeData() {
 	hi, err := host.Info()
 	if err == nil {
-		serverData.Uptime = uint64(time.Now().Unix()) - hi.BootTime
+		serverData.Uptime = hi.BootTime
 	}
 }
 

@@ -9,7 +9,9 @@
 If you get Illegal instruction then simple build the executable you need like this
 `bun build --compile --minify --target=bun-linux-x64-baseline --sourcemap ./src/index.ts --outfile ./ArtemisServer`
 
-# Client args
+# Client
+
+> Args
 
 |arg|default|desc|
 |    :----:   |    :----:   |    :----:   |
@@ -19,11 +21,24 @@ If you get Illegal instruction then simple build the executable you need like th
 |-u/--updateinterval|1.2|Report Interval|
 |-v/--verbose|false|Enable Verbose|
 
+> Deployment with script
+
+```bash
+curl -fsSL https://github.com/kwaitsing/Artemis/releases/download/pkg/install_client.sh >install_client.sh
+
+# arg1: Server WS Addr
+# arg2: Server Name(shouldn't be the same with any other servers)
+# arg3: passkey
+bash install_client.sh ws://example.com MyServer EPdnpTjAr0EV5yuDXFf5
+```
+
 > Example cmdline
 
 `./client -r ws://example.com:9702 -k 'meowmeowmeow' -n 'NyaServer' -u 2.1 -v`
 
-# Server args
+# Server
+
+> Args
 
 |arg|default|desc|
 |    :----:   |    :----:   |    :----:   |
@@ -33,3 +48,13 @@ If you get Illegal instruction then simple build the executable you need like th
 > Example cmdline
 
 `./server -p 9011 -k 'meowmeowmeow'`
+
+> Deployment
+
+1. make sure `caddy` is installed in your system
+2. Navi to ../setup and execute `./install_server.sh`
+3. `nano /opt/Artemis/ArtemisServer.service` to modify the config file
+4. Navi to ../server/Caddyfile, read the comments in it
+5. Copy or rewrite the configuration to your Caddyfile/Nginx conf
+6. Download `frontend.tar.gz` and configure it as the example Caddyfile described
+7. do `systemctl enable --now ArtemisServer.service` to launch the server

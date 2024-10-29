@@ -77,7 +77,11 @@ const serverConf: IgniteConf = {
 }
 
 urn.igniteInstance(serverConf)
-
-logger(`+ Artemis running on ${serverConf.hostname}:${serverConf.port}`, 0)
-
+logger(`
+		ArtemisServer MidnightTrain@1.0.0
+		Artemis is an HPFS server monitor
+		for more information please checkout
+		https://github.com/kwaitsing/Artemis
+`, 0)
+logger(`		Artemis running on ${serverConf.hostname}:${serverConf.port}\n`, 3)
 export type App = typeof instance

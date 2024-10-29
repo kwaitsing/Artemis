@@ -1,22 +1,11 @@
 import { hread, secondsToTime } from "toolbx"
 import { serverInStore } from "../../../server/src/type"
-import { useEffect, useState } from "react";
-
 export const ServerCard = (props: {
+    currentTS: number
     data: serverInStore
 }) => {
-
-    const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
     
-    useEffect(() => {
-        const int = setInterval(() => {
-            setCurrentTS(Math.floor(new Date().getTime() / 1000));
-        }, 1000);
-        
-        return () => clearInterval(int);
-    }, []);
-    
-    const Huptime = secondsToTime(props.data.uptime)
+    const Huptime = secondsToTime(props.currentTS - props.data.uptime)
 
     const CPUusage = Math.round(props.data.cpu * 100) / 100
 
@@ -43,7 +32,7 @@ export const ServerCard = (props: {
             <div className="row">
                 <div>
                     <img className="large" src={`/client/${props.data.location}.svg`} /><br />
-                    <div className={`chip responsive no-margin ${currentTS - props.data.timestamp > 60 ? 'red' : 'green'}`}><i>{currentTS - props.data.timestamp > 60 ? 'close' : 'verified'}</i></div>
+                    <div className={`chip responsive no-margin ${props.currentTS - props.data.timestamp > 60 ? 'red' : 'green'}`}><i>{props.currentTS - props.data.timestamp > 60 ? 'close' : 'verified'}</i></div>
                 </div>
                 <div className="max">
                     <h5>{props.data.name}</h5>
@@ -51,10 +40,10 @@ export const ServerCard = (props: {
                     <i>restart_alt</i><br /><span>Uptime: {Huptime.num} {Huptime.unit}</span>
                 </div>
                 <div className="max">
-                    <span><i>wifi</i> NW Total: </span><br />
+                    <span><i>bar_chart</i> NW Tot: </span><br />
                     <span>{HnetworkTX.num}{HnetworkTX.unit}↑</span><br />
                     <span>{HnetworkRX.num}{HnetworkRX.unit}↓</span><br />
-                    <span><i>public</i> NW Current: </span><br />
+                    <span><i>settings_ethernet</i> NW RT: </span><br />
                     <span>{HCnetworkTX.num}{HCnetworkTX.unit}↑</span><br />
                     <span>{HCnetworkRX.num}{HCnetworkRX.unit}↓</span><br />
                 </div>
