@@ -32,9 +32,15 @@ curl -fsSL https://github.com/kwaitsing/Artemis/releases/download/pkg/install_cl
 bash install_client.sh ws://example.com MyServer EPdnpTjAr0EV5yuDXFf5
 ```
 
+> Video showcase for the installation process
+
+![configure_client.gif](https://github.com/kwaitsing/Artemis/blob/main/documents/configure_client.gif?raw=true)
+
 > Example cmdline
 
 `./client -r ws://example.com:9702 -k 'meowmeowmeow' -n 'NyaServer' -u 2.1 -v`
+
+
 
 # Server
 
@@ -64,3 +70,9 @@ bash install_client.sh ws://example.com MyServer EPdnpTjAr0EV5yuDXFf5
 5. Copy or rewrite the configuration to your Caddyfile/Nginx conf
 6. Download `frontend.tar.gz` and configure it as the example Caddyfile described
 7. do `systemctl enable --now ArtemisServer.service` to launch the server
+
+> Video showcase for the installation process
+
+![server_base.gif](https://github.com/kwaitsing/Artemis/blob/main/documents/install_server.gif?raw=true)
+
+![configure_frontend.gif](https://github.com/kwaitsing/Artemis/blob/main/documents/configure_frontend.gif?raw=true)
