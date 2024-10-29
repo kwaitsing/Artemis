@@ -52,7 +52,13 @@ bash install_client.sh ws://example.com MyServer EPdnpTjAr0EV5yuDXFf5
 > Deployment
 
 1. make sure `caddy` is installed in your system
-2. Navi to ../setup and execute `./install_server.sh`
+2. ```bash
+   curl -fsSL https://github.com/kwaitsing/Artemis/releases/download/pkg/install_server.sh >install_server.sh
+
+   # arg1: Listen Port
+   # arg2: passkey
+   bash install_server.sh 8080 EPdnpTjAr0EV5yuDXFf5
+   ```
 3. `nano /opt/Artemis/ArtemisServer.service` to modify the config file
 4. Navi to ../server/Caddyfile, read the comments in it
 5. Copy or rewrite the configuration to your Caddyfile/Nginx conf
