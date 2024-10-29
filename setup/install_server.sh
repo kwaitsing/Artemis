@@ -25,7 +25,9 @@ After=multi-user.target
 Wants=multi-user.target
 
 [Service]
+MemoryMax=150M
 User=root
+MemorySwapMax=0B
 ExecStart=/opt/Artemis/ArtemisServer -p \"$1\" -k \"$2\"
 Restart=on-failure
 
