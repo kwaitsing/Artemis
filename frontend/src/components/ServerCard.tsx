@@ -19,8 +19,8 @@ export const ServerCard = (props: {
 
     const HnetworkRX = hread(props.data.network.total.down, true)
     const HnetworkTX = hread(props.data.network.total.up, true)
-    const HCnetworkRX = hread(props.data.network.current.down, true)
-    const HCnetworkTX = hread(props.data.network.current.up, true)
+    const HCnetworkRX = hread(props.data.network.current.down * 8, true, 0, false)
+    const HCnetworkTX = hread(props.data.network.current.up * 8, true, 0, false)
 
     const stoUsage = Math.round(props.data.storage.used / props.data.storage.total * 10000) / 100
     const HstoTotal = hread(props.data.storage.total)
@@ -44,8 +44,8 @@ export const ServerCard = (props: {
                     <span>{HnetworkTX.num}{HnetworkTX.unit}↑</span><br />
                     <span>{HnetworkRX.num}{HnetworkRX.unit}↓</span><br />
                     <span><i>settings_ethernet</i> NW RT: </span><br />
-                    <span>{HCnetworkTX.num}{HCnetworkTX.unit}↑</span><br />
-                    <span>{HCnetworkRX.num}{HCnetworkRX.unit}↓</span><br />
+                    <span>{HCnetworkTX.num}{HCnetworkTX.unit}ps↑</span><br />
+                    <span>{HCnetworkRX.num}{HCnetworkRX.unit}ps↓</span><br />
                 </div>
             </div>
             <div className="space"></div>

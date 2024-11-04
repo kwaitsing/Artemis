@@ -35,7 +35,7 @@ export const ServerTable = (props: {
             <tbody>
                 {
                     props.servers.map((server) => {
-                        
+
                         const Huptime = secondsToTime(props.currentTS - server.uptime)
 
                         const CPUusage = Math.round(server.cpu * 100) / 100
@@ -46,8 +46,8 @@ export const ServerTable = (props: {
 
                         const HnetworkRX = hread(server.network.total.down, true)
                         const HnetworkTX = hread(server.network.total.up, true)
-                        const HCnetworkRX = hread(server.network.current.down, true)
-                        const HCnetworkTX = hread(server.network.current.up, true)
+                        const HCnetworkRX = hread(server.network.current.down * 8, true, 0, false)
+                        const HCnetworkTX = hread(server.network.current.up * 8, true, 0, false)
 
                         const stoUsage = Math.round(server.storage.used / server.storage.total * 10000) / 100
 
@@ -65,7 +65,7 @@ export const ServerTable = (props: {
                                     <span>{HnetworkTX.num}{HnetworkTX.unit}↑</span><br /><span>{HnetworkRX.num}{HnetworkRX.unit}↓</span><br />
                                 </td>
                                 <td>
-                                    <span>{HCnetworkTX.num}{HCnetworkTX.unit}↑</span><br /><span>{HCnetworkRX.num}{HCnetworkRX.unit}↓</span><br />
+                                    <span>{HCnetworkTX.num}{HCnetworkTX.unit}ps↑</span><br /><span>{HCnetworkRX.num}{HCnetworkRX.unit}ps↓</span><br />
                                 </td>
                                 <td>
                                     <div className="chip no-margin">
