@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/node": "^22.8.7",
+    "@types/node": "^22.9.0",
     "ashes-wreath": "^0.1.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "toolbx": "^1.1.6"
+    "toolbx": "^1.1.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
@@ -25,7 +25,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.12.0",
     "typescript": "~5.6.3",
-    "typescript-eslint": "^8.12.2",
+    "typescript-eslint": "^8.13.0",
     "vite": "^5.4.10"
   }
 }
