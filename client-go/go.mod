@@ -1,4 +1,4 @@
-module artemis-client
+module ArtemisClient
 
 go 1.22.7
 

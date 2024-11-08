@@ -16,9 +16,9 @@ var serverData ServerObj
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:   "ArtemisClient",
-		Short: "ArtemisClient - HPFS server monitor",
+		Short: "Artemis - HPFS server monitor",
 		Long: `
-		ArtemisClient MidnightTrain@1.0.0
+		ArtemisClient LiminalStaircase@1.0.0
 		Artemis is an HPFS server monitor
 		for more information please checkout
 		https://github.com/kwaitsing/Artemis`,
