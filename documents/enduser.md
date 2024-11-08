@@ -11,6 +11,15 @@ If you get Illegal instruction then simple build the executable you need like th
 
 # Client
 
+**For alpine user**
+
+```
+Use install_client_alpine.sh
+and start the client with
+
+rc-server SRVArtemisClient restart
+```
+
 > Args
 
 |arg|default|desc|
@@ -56,6 +65,15 @@ bash install_client.sh ws://example.com MyServer EPdnpTjAr0EV5yuDXFf5
 `./server -p 9011 -k 'meowmeowmeow'`
 
 > Deployment
+
+**For alpine user**
+
+```
+Use install_server_alpine.sh
+and start the server with
+
+rc-server SRVArtemisServer restart
+```
 
 1. make sure `caddy` is installed in your system
 2. ```bash
