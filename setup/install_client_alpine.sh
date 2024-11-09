@@ -24,16 +24,18 @@ fi
 mkdir -p /opt/Artemis/
 
 # Copy Service
-echo -n "#!/sbin/openrc-run  
-name=\"ArtemisClient\"  
-command=\"/opt/Artemis/ArtemisClient\"  
-command_args=\"-r \"$1\" -n \"$2\" -k \"$3\"\"  
-pidfile=\"/run/${\RC_SVCNAME}.pid\"  
-command_background=\"yes\"              
-  
-depend() {  
-    need net   
-}" >/opt/Artemis/SRVArtemisClient
+cat <<EOF > /opt/Artemis/SRVArtemisClient
+#!/sbin/openrc-run
+name="ArtemisClient"
+command="/opt/Artemis/ArtemisClient"
+command_args="-r "$1" -n "$2" -k "$3""
+pidfile="/run/\${RC_SVCNAME}.pid"
+command_background="yes"
+
+depend() {
+    need net
+}
+EOF
 
 chmod +x /opt/Artemis/SRVArtemisClient
 

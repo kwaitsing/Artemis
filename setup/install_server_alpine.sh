@@ -19,16 +19,18 @@ fi
 mkdir -p /opt/Artemis/
 
 # Copy Service
-echo -n "#!/sbin/openrc-run  
-name=\"ArtemisServer\"  
-command=\"/opt/Artemis/ArtemisServer\"  
-command_args=\"-p \"$1\" -k \"$2\"\"  
-pidfile=\"/run/${\RC_SVCNAME}.pid\"  
-command_background=\"yes\"              
+cat <<EOF > /opt/Artemis/SRVArtemisServer
+#!/sbin/openrc-run  
+name="ArtemisServer"  
+command="/opt/Artemis/ArtemisServer"  
+command_args="-p "$1" -k "$2""  
+pidfile="/run/\${RC_SVCNAME}.pid"  
+command_background="yes"              
   
 depend() {  
     need net   
-}" >/opt/Artemis/SRVArtemisServer
+}
+EOF
 chmod +x /opt/Artemis/SRVArtemisServer
 # Download Core and
 cd /opt/Artemis && curl -L 'https://github.com/kwaitsing/Artemis/releases/download/pkg/ArtemisServer' >ArtemisServer && chmod +x ArtemisServer && ln -sf /opt/Artemis/SRVArtemisServer /etc/init.d/
