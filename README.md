@@ -5,7 +5,7 @@ Firelookout Server NG | HPFS server monitor built with URN.ts
 
 ![Preview expand](https://github.com/kwaitsing/Artemis/blob/main/documents/artemis_expand.png?raw=true)
 
-![Preview resp](https://github.com/kwaitsing/Artemis/blob/main/documents/artemis_responsive.png?raw=true)
+![Preview closed](https://github.com/kwaitsing/Artemis/blob/main/documents/artemis.png?raw=true)
 
 # Documents
 
