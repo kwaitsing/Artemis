@@ -8,7 +8,7 @@ import { ServerTable } from './components/ServerTable'
 
 function App() {
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [err, setERR] = useState('')
   const [data, setData] = useState<{
     servers: serverInStore[],
@@ -20,7 +20,15 @@ function App() {
   const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
 
   useEffect(() => {
-    setInterval(async () => {
+    const int = setInterval(() => {
+      setCurrentTS(Math.floor(new Date().getTime() / 1000));
+    }, 1000);
+
+    return () => clearInterval(int);
+  }, []);
+
+  useEffect(() => {
+    const mainfn = async () => {
       try {
         const returnData = await socket()
         if (returnData.status === 'ok') {
@@ -28,6 +36,7 @@ function App() {
           const onlineServers: serverInStore[] = (returnData.data.servers as serverInStore[]).filter((server) => {
             if (currentTS - server.timestamp > 60) {
               downServer.push(server)
+              return false
             } else {
               return true
             }
@@ -42,25 +51,19 @@ function App() {
         if (loading) setLoading(false);
       } catch (error) {
         setERR(`${error}`)
+        setLoading(false)
       }
-    }, 1000)
-  }, [])
-
-  useEffect(() => {
-    const int = setInterval(() => {
-      setCurrentTS(Math.floor(new Date().getTime() / 1000));
-    }, 1000);
-
-    return () => clearInterval(int);
-  }, []);
+    }
+    mainfn()
+  }, [currentTS])
 
   if (loading || !data) return <Loading msg={'Loading data from artemis server'} />
 
   return (
     <>
       <header className='center-align'>
-        <h5 className='large-padding'>Artemis Server Monitor</h5>
-        <span>DimLight@build1.0.0</span>
+        <h5 className='top-padding large-padding'>Artemis Server Monitor</h5>
+        <span className='down-padding'>DimLight@build1.0.0</span>
       </header>
 
       <article className='no-round no-margin'>
