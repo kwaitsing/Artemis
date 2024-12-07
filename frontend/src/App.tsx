@@ -14,6 +14,8 @@ function App() {
     servers: serverInStore[],
     timestamp: number
   }>()
+  const [displayDown, setDisplayDown] = useState(false)
+  const [down, setDown] = useState<serverInStore[]>([])
 
   const [currentTS, setCurrentTS] = useState(Math.floor(new Date().getTime() / 1000));
 
@@ -21,9 +23,23 @@ function App() {
     setInterval(async () => {
       try {
         const returnData = await socket()
-        if (returnData.status === 'ok')
-          setData(returnData.data);
-        if (loading) setLoading(false)
+        if (returnData.status === 'ok') {
+          let downServer: serverInStore[] = []
+          const onlineServers: serverInStore[] = (returnData.data.servers as serverInStore[]).filter((server) => {
+            if (currentTS - server.timestamp > 60) {
+              downServer.push(server)
+            } else {
+              return true
+            }
+          })
+
+          setDown(downServer)
+          setData({
+            servers: onlineServers,
+            timestamp: returnData.data.timestamp
+          })
+        }
+        if (loading) setLoading(false);
       } catch (error) {
         setERR(`${error}`)
       }
@@ -32,11 +48,11 @@ function App() {
 
   useEffect(() => {
     const int = setInterval(() => {
-        setCurrentTS(Math.floor(new Date().getTime() / 1000));
+      setCurrentTS(Math.floor(new Date().getTime() / 1000));
     }, 1000);
-    
+
     return () => clearInterval(int);
-}, []);
+  }, []);
 
   if (loading || !data) return <Loading msg={'Loading data from artemis server'} />
 
@@ -44,19 +60,36 @@ function App() {
     <>
       <header className='center-align'>
         <h5 className='large-padding'>Artemis Server Monitor</h5>
+        <span>DimLight@build1.0.0</span>
       </header>
+
       <article className='no-round no-margin'>
-        <div className='large-margin' style={{ overflowX: 'auto' }}>
-          <ServerTable currentTS={currentTS} servers={data.servers} />
+        <div className='small-margin' style={{ overflowX: 'auto' }}>
+          {
+            down.length > 0 ? (
+              <article onClick={() => setDisplayDown(!displayDown)} className="button small-padding small-round no-elevate round fill responsive">
+                <nav>
+                  <div className={`chip no-margin red no-elevate`}>{down.length}</div>
+                  <div className="max">Server(s) down</div>
+                  <i>{displayDown ? 'collapse_all' : 'expand_all'}</i>
+                </nav>
+              </article>
+            ) : ''
+          }
+          <ServerTable currentTS={currentTS} servers={data.servers} downServers={down} displayDown={displayDown} />
         </div>
       </article>
 
-
-      <div className='medium-padding center-align' style={{ display: 'flex' , gap: '20px', flexWrap: 'wrap'}}>
+      <div className='medium-padding center-align' style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
         {
           data.servers.map((server) => {
             return <ServerCard currentTS={currentTS} key={server.name} data={server} />
           })
+        }
+        {
+          displayDown ? down.map((server) => {
+            return <ServerCard currentTS={currentTS} key={server.name} data={server} />
+          }) : ''
         }
       </div>
       <FatalErr msg={err} />
