@@ -16,7 +16,7 @@ func main() {
 		Use:   "ArtemisServer",
 		Short: "Artemis - HPFS server monitor",
 		Long: `
-		ArtemisServer LiminalStaircase@1.0.0
+		ArtemisServer DimLight@build1.0.0
 		Artemis is an HPFS server monitor
 		for more information please checkout
 		https://github.com/kwaitsing/Artemis`,
