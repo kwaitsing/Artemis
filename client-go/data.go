@@ -29,6 +29,8 @@ func get_location() {
 		if GlobalConfiguration.Verbose {
 			println("Unable to fetch Location: ", err)
 		}
+		serverData.Location = "trans"
+		return
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll((resp.Body))
@@ -36,6 +38,8 @@ func get_location() {
 		if GlobalConfiguration.Verbose {
 			println("Unable to fetch Location: ", err)
 		}
+		serverData.Location = "trans"
+		return
 	}
 
 	lines := strings.Split(string(body), "\n")
@@ -58,8 +62,8 @@ func getOneTimeData() {
 }
 
 func collect_data() ServerObj {
-	// Update location if your server is in transnia
-	if serverData.Location == "trans" {
+	// Update location if your server is operated by Captain Jack
+	if serverData.Location == "pirate" {
 		get_location()
 	}
 	if serverData.Uptime == 0 {

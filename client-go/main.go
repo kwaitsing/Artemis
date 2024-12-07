@@ -26,7 +26,7 @@ func main() {
 
 			serverData = ServerObj{
 				Name:     GlobalConfiguration.Name,
-				Location: "trans",
+				Location: "pirate",
 			}
 
 			interrupt := make(chan os.Signal, 1)
