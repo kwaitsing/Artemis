@@ -67,8 +67,7 @@ function App() {
       </header>
 
       <article className='no-round no-margin'>
-        <div className='small-margin' style={{ overflowX: 'auto' }}>
-          {
+      {
             down.length > 0 ? (
               <article onClick={() => setDisplayDown(!displayDown)} className="button small-padding small-round no-elevate round fill responsive">
                 <nav>
@@ -79,6 +78,7 @@ function App() {
               </article>
             ) : ''
           }
+        <div className='small-margin' style={{ overflowX: 'auto' }}>
           <ServerTable currentTS={currentTS} servers={data.servers} downServers={down} displayDown={displayDown} />
         </div>
       </article>
