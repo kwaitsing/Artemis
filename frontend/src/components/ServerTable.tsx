@@ -18,7 +18,7 @@ export const ServerTable = (props: {
                         <th>Name</th>
                         <th>Uptime</th>
                         <th>Network(xB)</th>
-                        <th>Network Current(xB)</th>
+                        <th>Network Current(xbps)</th>
                         <th>CPU(%)</th>
                         <th>RAM(%)</th>
                         <th>Swap(%)</th>
